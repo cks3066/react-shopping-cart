@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import SnackBar from "./components/@shared/SnackBar";
+import { RootState } from "./redux/store";
+
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import OrderList from "./pages/OrderList";
 import ProductList from "./pages/ProductList";
+
+import SnackBar from "./components/@shared/SnackBar";
 import Header from "./components/Header";
-import { RootState } from "./redux/store";
 
 function App() {
   const { isShowSnackBar, message } = useSelector((state: RootState) => state.snackBar);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch("https://react-payments-onstar.herokuapp.com/productList/20")
+      .then((response) => response.json())
+      .then((data) => setUser(data));
+  }, []);
+
+  console.log(user);
 
   return (
     <Router basename={process.env.PUBLIC_URL}>
